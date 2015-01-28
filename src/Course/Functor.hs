@@ -37,12 +37,8 @@ infixl 4 <$>
 -- >>> (+1) <$> Id 2
 -- Id 3
 instance Functor Id where
-  (<$>) ::
-    (a -> b)
-    -> Id a
-    -> Id b
-  (<$>) =
-    error "todo"
+  (<$>) :: (a -> b) -> Id a -> Id b
+  (<$>) f (Id x) = Id (f x)
 
 -- | Maps a function on the List functor.
 --
@@ -52,10 +48,7 @@ instance Functor Id where
 -- >>> (+1) <$> (1 :. 2 :. 3 :. Nil)
 -- [2,3,4]
 instance Functor List where
-  (<$>) ::
-    (a -> b)
-    -> List a
-    -> List b
+  (<$>) :: (a -> b) -> List a -> List b
   (<$>) =
     error "todo"
 
@@ -67,24 +60,17 @@ instance Functor List where
 -- >>> (+1) <$> Full 2
 -- Full 3
 instance Functor Optional where
-  (<$>) ::
-    (a -> b)
-    -> Optional a
-    -> Optional b
-  (<$>) =
-    error "todo"
+  (<$>) :: (a -> b) -> Optional a -> Optional b
+  (<$>) f (Full x) = Full (f x)
+  (<$>) _ Empty    = Empty
 
 -- | Maps a function on the reader ((->) t) functor.
 --
 -- >>> ((+1) <$> (*2)) 8
 -- 17
 instance Functor ((->) t) where
-  (<$>) ::
-    (a -> b)
-    -> ((->) t a)
-    -> ((->) t b)
-  (<$>) =
-    error "todo"
+  (<$>) :: (a -> b) -> ((->) t a) -> ((->) t b)
+  (<$>) f g = f . g
 
 -- | Anonymous map. Maps a constant value on a functor.
 --
@@ -95,12 +81,8 @@ instance Functor ((->) t) where
 --
 -- prop> x <$ Full q == Full x
 (<$) ::
-  Functor f =>
-  a
-  -> f b
-  -> f a
-(<$) =
-  error "todo"
+  Functor f => a -> f b -> f a
+(<$) x xs = (<$>) (const x) xs
 
 -- | Anonymous map producing unit value.
 --
@@ -116,11 +98,8 @@ instance Functor ((->) t) where
 -- >>> void (+10) 5
 -- ()
 void ::
-  Functor f =>
-  f a
-  -> f ()
-void =
-  error "todo"
+  Functor f => f a -> f ()
+void = (<$>) (const ())
 
 -----------------------
 -- SUPPORT LIBRARIES --
