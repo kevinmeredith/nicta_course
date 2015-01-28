@@ -49,8 +49,8 @@ instance Functor Id where
 -- [2,3,4]
 instance Functor List where
   (<$>) :: (a -> b) -> List a -> List b
-  (<$>) =
-    error "todo"
+  (<$>) _ Nil       = Nil
+  (<$>) f (x :. xs) = (f x) :. (<$>) f xs
 
 -- | Maps a function on the Optional functor.
 --
