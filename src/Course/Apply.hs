@@ -49,7 +49,9 @@ instance Apply List where
     List (a -> b)
     -> List a
     -> List b
-  (<*>) =
+  (<*>) Nil _               = Nil
+  (<*>) (f :. xs) ys = (P.fmap f ys) ++ (xs <*> ys)
+
     
 
 -- | Implement @Apply@ instance for @Optional@.
@@ -67,8 +69,9 @@ instance Apply Optional where
     Optional (a -> b)
     -> Optional a
     -> Optional b
-  (<*>) =
-    error "todo"
+  (<*>) Empty _ = Empty
+  (<*>) _ Empty = Empty
+  (<*>) (Full f) (Full x) = Full (f x)
 
 -- | Implement @Apply@ instance for reader.
 --
@@ -91,8 +94,7 @@ instance Apply ((->) t) where
     ((->) t (a -> b))
     -> ((->) t a)
     -> ((->) t b)
-  (<*>) =
-    error "todo"
+  (<*>) = error "todo"
 
 -- | Apply a binary function in the environment.
 --
@@ -119,8 +121,7 @@ lift2 ::
   -> f a
   -> f b
   -> f c
-lift2 =
-  error "todo"
+lift2 f x y = f <$> x <*> y
 
 -- | Apply a ternary function in the environment.
 --

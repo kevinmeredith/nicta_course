@@ -39,6 +39,11 @@ infixr 5 :.
 instance Show t => Show (List t) where
   show = show . foldRight (:) []
 
+instance P.Functor List where
+  fmap _ Nil       = Nil
+  fmap f (x :. xs) = f x :. P.fmap f xs
+
+
 -- The list of integers from zero to infinity.
 infinity ::
   List Integer
@@ -163,8 +168,10 @@ filter =
   List a
   -> List a
   -> List a
-(++) =
-  error "todo"
+(++) Nil ys       = ys
+(++) xs Nil       = xs
+(++) (x :. xs) ys = case xs of Nil -> x :. ys
+                               _   -> x :. (xs ++ ys)
 
 infixr 5 ++
 
