@@ -46,8 +46,8 @@ class Apply f => Applicative f where
   (a -> b)
   -> f a
   -> f b
-(<$>) =
-  error "todo"
+(<$>) f xs = pure f <*> xs
+  
 
 -- | Insert into Id.
 --
@@ -56,8 +56,7 @@ instance Applicative Id where
   pure ::
     a
     -> Id a
-  pure =
-    error "todo"
+  pure = Id
 
 -- | Insert into a List.
 --
@@ -66,8 +65,7 @@ instance Applicative List where
   pure ::
     a
     -> List a
-  pure =
-    error "todo"
+  pure = \x -> x :. Nil
 
 -- | Insert into an Optional.
 --
@@ -76,8 +74,7 @@ instance Applicative Optional where
   pure ::
     a
     -> Optional a
-  pure =
-    error "todo"
+  pure = Full
 
 -- | Insert into a constant function.
 --
@@ -133,8 +130,7 @@ replicateA ::
   Int
   -> f a
   -> f (List a)
-replicateA =
-  error "todo"
+replicateA = error "todo"
 
 -- | Filter a list with a predicate that produces an effect.
 --
