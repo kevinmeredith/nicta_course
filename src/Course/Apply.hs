@@ -94,7 +94,7 @@ instance Apply ((->) t) where
     ((->) t (a -> b))
     -> ((->) t a)
     -> ((->) t b)
-  (<*>) = error "todo"
+  (<*>) f g =  \x -> ((f x) . g) x
 
 -- | Apply a binary function in the environment.
 --
@@ -204,13 +204,13 @@ lift4 f x y z a = f <$> x <*> y <*> z <*> a
 -- prop> [a,b,c] *> [x,y,z] == [x,y,z,x,y,z,x,y,z]
 --
 -- prop> Full x *> Full y == Full y
+-- got a very helpful answer from http://stackoverflow.com/questions/29023602/understanding-right-apply
 (*>) ::
   Apply f =>
   f a
   -> f b
   -> f b
-(*>) =
-  error "todo"
+(*>) xs ys = const id <$> xs <*> ys
 
 -- | Sequence, discarding the value of the second argument.
 -- Pronounced, left apply.
@@ -235,8 +235,8 @@ lift4 f x y z a = f <$> x <*> y <*> z <*> a
   f b
   -> f a
   -> f b
-(<*) =
-  error "todo"
+(<*) = xs ys = flip (const id) <$> xs <*> ys
+  
 
 -----------------------
 -- SUPPORT LIBRARIES --
