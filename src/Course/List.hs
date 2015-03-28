@@ -132,8 +132,7 @@ map ::
   (a -> b)
   -> List a
   -> List b
-map _ Nil       = Nil
-map f (x :. xs) = f x :. map f xs
+map f = foldRight (\x acc -> f x :. acc) Nil
 
 -- | Return elements satisfying the given predicate.
 --
@@ -149,8 +148,7 @@ filter ::
   (a -> Bool)
   -> List a
   -> List a
-filter =
-  error "todo"
+filter f = foldRight (\x acc -> if (f x) then x :. acc else acc) Nil
 
 -- | Append two lists to a new list.
 --
@@ -214,8 +212,7 @@ flatMap f xs = flatten $ map f xs
 flattenAgain ::
   List (List a)
   -> List a
-flattenAgain =
-  error "todo"
+flattenAgain = flatMap id
 
 -- | Convert a list of optional values to an optional list of values.
 --
@@ -265,8 +262,7 @@ find ::
   (a -> Bool)
   -> List a
   -> Optional a
-find =
-  error "todo"
+find f = foldRight (\x acc -> if (f x) then Full x else Empty) Empty
 
 -- | Determine if the length of the given list is greater than 4.
 --
