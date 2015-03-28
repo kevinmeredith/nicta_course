@@ -188,8 +188,8 @@ infixr 5 ++
 flatten ::
   List (List a)
   -> List a
-flatten =
-  error "todo"
+flatten (x :. xs) = x ++ (flatten xs)
+flatten Nil       = Nil
 
 -- | Map a function then flatten to a list.
 --

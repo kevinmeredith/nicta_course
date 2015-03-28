@@ -68,8 +68,7 @@ infixr 1 =<<
   f (a -> b)
   -> f a
   -> f b
-(<*>) =
-  error "todo"
+(<*>) = error "todo"
 
 infixl 4 <*>
 

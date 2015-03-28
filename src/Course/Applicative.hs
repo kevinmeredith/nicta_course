@@ -83,8 +83,7 @@ instance Applicative ((->) t) where
   pure ::
     a
     -> ((->) t a)
-  pure =
-    error "todo"
+  pure x _ = x
 
 -- | Sequences a list of structures to a structure of list.
 --
@@ -106,8 +105,8 @@ sequence ::
   Applicative f =>
   List (f a)
   -> f (List a)
-sequence =
-  error "todo"
+sequence (x :. xs) = (:.) <$> x <*> sequence xs
+sequence Nil       = pure Nil
 
 -- | Replicate an effect a given number of times.
 --
@@ -130,7 +129,7 @@ replicateA ::
   Int
   -> f a
   -> f (List a)
-replicateA = error "todo"
+replicateA n f = sequence $ replicate n f
 
 -- | Filter a list with a predicate that produces an effect.
 --
@@ -157,8 +156,10 @@ filtering ::
   (a -> f Bool)
   -> List a
   -> f (List a)
-filtering =
-  error "todo"
+filtering _ Nil       = pure Nil
+filtering f (x :. xs) = (++) <$> ((\y -> case y of True -> x :. Nil
+                                                   False -> Nil) <$> f x) <*> filtering f xs
+
 
 -----------------------
 -- SUPPORT LIBRARIES --

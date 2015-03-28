@@ -235,7 +235,7 @@ lift4 f x y z a = f <$> x <*> y <*> z <*> a
   f b
   -> f a
   -> f b
-(<*) = xs ys = flip (const id) <$> xs <*> ys
+(<*) xs ys = flip (const id) <$> xs <*> ys
   
 
 -----------------------
