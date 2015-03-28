@@ -132,8 +132,8 @@ map ::
   (a -> b)
   -> List a
   -> List b
-map =
-  error "todo"
+map _ Nil       = Nil
+map f (x :. xs) = f x :. map f xs
 
 -- | Return elements satisfying the given predicate.
 --
@@ -205,8 +205,7 @@ flatMap ::
   (a -> List b)
   -> List a
   -> List b
-flatMap =
-  error "todo"
+flatMap f xs = flatten $ map f xs
 
 -- | Flatten a list of lists to a list (again).
 -- HOWEVER, this time use the /flatMap/ function that you just wrote.
