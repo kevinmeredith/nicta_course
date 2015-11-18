@@ -38,6 +38,16 @@ contains :: Eq a => a -> Optional a -> Bool
 contains _ Empty = False
 contains a (Full z) = a == z
 
+instance P.Functor Optional where
+  fmap f (Full x) = Full (f x)
+  fmap _ Empty    = Empty
+
+
+instance P.Applicative Optional where
+  pure                = Full
+  Full f <*> (Full x) = Full (f x)
+  _ <*> _             = Empty
+
 instance P.Monad Optional where
   (>>=) =
     flip bindOptional

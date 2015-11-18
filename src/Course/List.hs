@@ -17,6 +17,7 @@ import Course.Optional
 import qualified System.Environment as E
 import qualified Prelude as P
 import qualified Numeric as N
+import Control.Applicative
 
 
 -- $setup
@@ -684,6 +685,17 @@ show' ::
   -> List Char
 show' =
   listh . show
+
+instance P.Functor List where
+  P.fmap _ Nil       = Nil
+  fmap f (x :. xs) =  f x :. (fmap f xs)
+
+
+instance P.Applicative List where
+  pure x = x :. Nil
+  Nil <*> _        = Nil
+  _ <*> Nil        = Nil
+  (f :. fs) <*> xs = P.fmap f xs ++ fs <*> xs
 
 instance P.Monad List where
   (>>=) =
